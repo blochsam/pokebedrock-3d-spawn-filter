@@ -14,7 +14,7 @@
 <table>
 <tr>
 <td width="140" align="center">
-  <img src="assets/skin.png" alt="" width="100"/>
+  <img src="assets/sprite.png" alt="" width="100"/>
 </td>
 <td>
 
