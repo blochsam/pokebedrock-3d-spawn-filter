@@ -129,6 +129,8 @@ const BLACKLIST = new Set([
 
 Format: `"pokemon:<name>"` matching the entity typeId.
 
+See [`DENYLIST.md`](DENYLIST.md) for the full list of all 488 blocked Pokemon with their typeIds.
+
 <br/>
 
 ## Requirements
@@ -147,6 +149,7 @@ Format: `"pokemon:<name>"` matching the entity typeId.
 - Already-spawned 2D Pokemon get cleaned up within 3 seconds, or clear them with `/kill @e[type=pokemon:<name>]`
 - This does **not** modify PokeBedrock — it's a standalone add-on that runs alongside it
 - Future PokeBedrock updates may add 3D models for listed Pokemon. Remove them from the blacklist when that happens.
+- **This has not been tested in PokeBedrock battles.** The filter removes entities from world spawns — we haven't verified whether it interferes with battle encounters. If you run into issues, let us know.
 - **This was a weekend project and probably won't be updated.** The code is simple and easy to fork.
 
 <br/>
