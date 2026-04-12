@@ -1,48 +1,61 @@
 <p align="center">
-  <img src="assets/skin.png" alt="Sam's Minecraft skin" width="200"/>
-</p>
-
-<h1 align="center">PokeBedrock 3D Spawn Filter</h1>
-
-<p align="center">
-  <em>Because nobody wants flat Pokemon ruining the vibes.</em>
+  <img src="assets/banner.svg" alt="PokeBedrock 3D Spawn Filter" width="100%"/>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/PokeBedrock-v4.4.2_beta-red?style=flat-square" alt="PokeBedrock version"/>
-  <img src="https://img.shields.io/badge/BDS-1.26.14.1-green?style=flat-square" alt="BDS version"/>
-  <img src="https://img.shields.io/badge/Pokemon_blocked-488-blue?style=flat-square" alt="Pokemon blocked"/>
-  <img src="https://img.shields.io/badge/maintained%3F-nah-yellow?style=flat-square" alt="Maintained?"/>
+  <img src="https://img.shields.io/badge/PokeBedrock-v4.4.2_beta-DC0A2D?style=for-the-badge&labelColor=1a1a2e" alt="PokeBedrock"/>
+  <img src="https://img.shields.io/badge/BDS-1.26.14.1-f5f5f5?style=for-the-badge&labelColor=1a1a2e" alt="BDS"/>
+  <img src="https://img.shields.io/badge/blocked-488_pokemon-3B4CCA?style=for-the-badge&labelColor=1a1a2e" alt="Blocked"/>
+  <img src="https://img.shields.io/badge/license-MIT-FFDE00?style=for-the-badge&labelColor=1a1a2e" alt="License"/>
 </p>
 
----
+<br/>
 
-## What is this?
+<table>
+<tr>
+<td width="140" align="center">
+  <img src="assets/skin.png" alt="" width="100"/>
+</td>
+<td>
 
-A drop-in behavior pack for Bedrock Dedicated Servers running [PokeBedrock](https://pokebedrock.com). It removes all the Pokemon that only have 2D sprites (no 3D models) so your world doesn't look like someone taped trading cards to the ground.
+**What is this?** A drop-in behavior pack for Bedrock Dedicated Servers running [PokeBedrock](https://pokebedrock.com). It removes all Pokemon that only have 2D sprites — no 3D models — so your world stays fully immersive. 488 Pokemon filtered, including Alolan, Galarian, Hisuian, and Paldean regional forms.
 
-**488 Pokemon filtered** — including Alolan, Galarian, Hisuian, and Paldean regional forms.
+</td>
+</tr>
+</table>
 
-## The backstory
+<br/>
 
-I was setting up a PokeBedrock server for my friends and we kept running into flat 2D Pokemon spawning everywhere. Tried deleting spawn rules. Didn't work. Tried renaming entity files. Nope. Turns out PokeBedrock's entire spawn system lives inside a **56MB obfuscated JavaScript file** that ignores everything on disk.
+## Backstory
 
-So I wrote a script that just... waits for them to spawn and immediately deletes them. Sometimes brute force is the answer.
+I was setting up a PokeBedrock server for my friends and we kept running into flat 2D Pokemon spawning everywhere. Tried deleting spawn rules — didn't work. Tried renaming entity files — nope. Turns out PokeBedrock's entire spawn system lives inside a **56MB obfuscated JavaScript file** that ignores the filesystem entirely.
 
-> *"What are they gonna do, throw me in Boat Jail?"*
-> — the 2D Pokemon, probably
+So I wrote a script that intercepts entity spawns and removes anything on a blacklist before you ever see it.
+
+<br/>
 
 ## How it works
 
-Two methods, because these flat guys are persistent:
+```
+┌─────────────────────────────────────────────────────────────┐
+│                                                             │
+│   Method 1: entitySpawn listener                            │
+│   ► Catches and removes blacklisted Pokemon instantly       │
+│                                                             │
+│   Method 2: Tick scanner (every 3s)                         │
+│   ► Backup sweep for script-spawned entities that           │
+│     bypass the spawn event                                  │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+```
 
-**`entitySpawn` listener** — catches and removes blacklisted Pokemon the instant they appear
-
-**Tick scanner (every 3s)** — backup sweep for entities spawned by PokeBedrock's script engine, which sometimes bypasses the spawn event
+<br/>
 
 ## Quick start
 
-**1.** Drop this folder into your server's `behavior_packs/` directory:
+<details open>
+<summary><b>1 — Drop into behavior_packs</b></summary>
+<br/>
 
 ```
 your_server/
@@ -53,7 +66,13 @@ your_server/
             └── main.js
 ```
 
-**2.** Register the pack in `worlds/world/world_behavior_packs.json` — add this to the array:
+</details>
+
+<details open>
+<summary><b>2 — Register the pack</b></summary>
+<br/>
+
+Add to `worlds/world/world_behavior_packs.json`:
 
 ```json
 {
@@ -62,7 +81,15 @@ your_server/
 }
 ```
 
-**3.** Make sure `@minecraft/server` is in your `config/default/permissions.json`:
+Don't remove your PokeBedrock entry.
+
+</details>
+
+<details open>
+<summary><b>3 — Verify permissions</b></summary>
+<br/>
+
+Make sure `@minecraft/server` is in `config/default/permissions.json`:
 
 ```json
 {
@@ -70,52 +97,62 @@ your_server/
 }
 ```
 
-(If PokeBedrock already works on your server, this is already set.)
+If PokeBedrock already works, this is already set.
 
-**4.** Restart. Look for this in the console:
+</details>
+
+<details open>
+<summary><b>4 — Restart</b></summary>
+<br/>
+
+Look for this in the console:
 
 ```
 [Scripting] [3D Spawn Filter] Loaded - blocking 488 Pokemon without 3D models.
 ```
 
-You're done. Go catch some *real* Pokemon.
+</details>
+
+<br/>
 
 ## Customizing the blacklist
 
-Open `scripts/main.js` and find the `BLACKLIST` set at the top. Add or remove entries:
+Open `scripts/main.js` and edit the `BLACKLIST` set:
 
 ```js
 const BLACKLIST = new Set([
   "pokemon:abomasnow",
   "pokemon:absol",
-  // ... your list here
+  // add or remove entries here
 ]);
 ```
 
-Format is `"pokemon:<name>"` matching the entity typeId.
+Format: `"pokemon:<name>"` matching the entity typeId.
+
+<br/>
 
 ## Requirements
 
-- [PokeBedrock](https://pokebedrock.com) (tested with **v4.4.2 beta**)
-- Bedrock Dedicated Server (tested with **BDS 1.26.14.1**)
-- `@minecraft/server` module enabled
-- Experiments enabled: Upcoming Creator Features, GameTest, Data Driven Items
+| | |
+|---|---|
+| **Add-on** | [PokeBedrock](https://pokebedrock.com) v4.4.2 beta |
+| **Server** | Bedrock Dedicated Server 1.26.14.1 |
+| **Module** | `@minecraft/server` enabled |
+| **Experiments** | Upcoming Creator Features, GameTest, Data Driven Items |
 
-## Good to know
+<br/>
 
-- Already-spawned 2D Pokemon get cleaned up within 3 seconds, or nuke them with `/kill @e[type=pokemon:<name>]`
-- This does **not** modify PokeBedrock in any way — it's a standalone add-on
-- Future PokeBedrock updates may add 3D models for some of these Pokemon. When that happens, just remove them from the blacklist
-- **I probably won't be updating this.** It was a weekend project. But the code is simple and easy to fork.
+## Notes
+
+- Already-spawned 2D Pokemon get cleaned up within 3 seconds, or clear them with `/kill @e[type=pokemon:<name>]`
+- This does **not** modify PokeBedrock — it's a standalone add-on that runs alongside it
+- Future PokeBedrock updates may add 3D models for listed Pokemon. Remove them from the blacklist when that happens.
+- **This was a weekend project and probably won't be updated.** The code is simple and easy to fork.
+
+<br/>
 
 ## License
 
-MIT — do whatever you want with it. See [LICENSE](LICENSE) for details.
+MIT. See [LICENSE](LICENSE).
 
 This project is not affiliated with or endorsed by PokeBedrock or its developers.
-
----
-
-<p align="center">
-  <em>Built with mild frustration and a lot of FTP uploads by <a href="https://github.com/blochsam">@blochsam</a></em>
-</p>
