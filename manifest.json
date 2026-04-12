@@ -3,15 +3,15 @@
   "header": {
     "name": "PokeBedrock 3D Spawn Filter",
     "description": "Removes Pokemon that lack 3D models from spawning",
-    "uuid": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
-    "version": [1, 0, 0],
+    "uuid": "7cf770a8-b181-4291-8443-d5cf5e66626d",
+    "version": [1, 1, 0],
     "min_engine_version": [1, 21, 0]
   },
   "modules": [
     {
       "type": "script",
       "language": "javascript",
-      "uuid": "d4c3b2a1-f6e5-4b7a-9d8c-1e0f3a2b5c4d",
+      "uuid": "acc19382-b820-4833-bbfe-13bb55ba7a66",
       "entry": "scripts/main.js",
       "version": [1, 0, 0]
     }

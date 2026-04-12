@@ -42,54 +42,65 @@ So I wrote a script that intercepts entity spawns and removes anything on a blac
 │   Method 1: entitySpawn listener                            │
 │   ► Catches and removes blacklisted Pokemon instantly       │
 │                                                             │
-│   Method 2: Tick scanner (every 3s)                         │
+│   Method 2: Tick scanner (every 3s, all dimensions)         │
 │   ► Backup sweep for script-spawned entities that           │
-│     bypass the spawn event                                  │
+│     bypass the spawn event — covers overworld, nether,      │
+│     and the end                                             │
 │                                                             │
 └─────────────────────────────────────────────────────────────┘
 ```
 
 <br/>
 
-## Quick start
+---
 
-<details open>
-<summary><b>1 — Drop into behavior_packs</b></summary>
-<br/>
+## Installation
 
+Pick **one** of the two methods below. The `.mcpack` is easier if you're not comfortable with FTP.
+
+---
+
+### Option A: Download the `.mcpack` (easiest)
+
+1. Go to the [Releases](https://github.com/blochsam/pokebedrock-3d-spawn-filter/releases) page
+2. Download `PokeBedrock-3D-Spawn-Filter.mcpack`
+3. Unzip it (it's just a `.zip` renamed — use 7-Zip, WinRAR, or just rename it to `.zip`)
+4. Upload the entire extracted folder into your server's `behavior_packs/` directory via FTP or your host's file manager
+5. Jump to **"Register the pack"** below
+
+### Option B: Clone from GitHub
+
+```bash
+cd your_server/behavior_packs/
+git clone https://github.com/blochsam/pokebedrock-3d-spawn-filter.git
 ```
-your_server/
-└── behavior_packs/
-    └── pokebedrock-3d-spawn-filter/
-        ├── manifest.json
-        └── scripts/
-            └── main.js
-```
 
-</details>
+Or download the repo as a ZIP from the green **Code** button on GitHub.
 
-<details open>
-<summary><b>2 — Register the pack</b></summary>
-<br/>
+---
 
-Add to `worlds/world/world_behavior_packs.json`:
+### Register the pack
+
+Open `worlds/<your_world>/world_behavior_packs.json` and add this entry to the array:
 
 ```json
 {
-  "pack_id": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
-  "version": [1, 0, 0]
+  "pack_id": "7cf770a8-b181-4291-8443-d5cf5e66626d",
+  "version": [1, 1, 0]
 }
 ```
 
-Don't remove your PokeBedrock entry.
+> **Don't** remove your existing PokeBedrock entry — just add this one alongside it. The file should look something like:
+> ```json
+> [
+>   { "pack_id": "your-pokebedrock-uuid-here", "version": [4, 4, 2] },
+>   { "pack_id": "7cf770a8-b181-4291-8443-d5cf5e66626d", "version": [1, 1, 0] }
+> ]
+> ```
 
-</details>
+### Check permissions
 
-<details open>
-<summary><b>3 — Verify permissions</b></summary>
-<br/>
-
-Make sure `@minecraft/server` is in `config/default/permissions.json`:
+Make sure `@minecraft/server` is allowed. Open `config/default/permissions.json` and confirm it contains:
 
 ```json
 {
@@ -97,23 +108,21 @@ Make sure `@minecraft/server` is in `config/default/permissions.json`:
 }
 ```
 
-If PokeBedrock already works, this is already set.
+If PokeBedrock is already working on your server, this is already set — you can skip this step.
 
-</details>
+### Restart and verify
 
-<details open>
-<summary><b>4 — Restart</b></summary>
-<br/>
-
-Look for this in the console:
+Restart your server and look for this line in the console:
 
 ```
-[Scripting] [3D Spawn Filter] Loaded - blocking 488 Pokemon without 3D models.
+[Scripting] [3D Spawn Filter] v1.1.0 loaded - blocking 488 Pokemon without 3D models across all dimensions.
 ```
 
-</details>
+If you see that, you're good.
 
 <br/>
+
+---
 
 ## Customizing the blacklist
 
@@ -129,7 +138,7 @@ const BLACKLIST = new Set([
 
 Format: `"pokemon:<name>"` matching the entity typeId.
 
-See [`DENYLIST.md`](DENYLIST.md) for the full list of all 488 blocked Pokemon with their typeIds.
+See [`DENYLIST.md`](DENYLIST.md) for the full table of all 488 blocked Pokemon with their typeIds.
 
 <br/>
 
@@ -146,10 +155,11 @@ See [`DENYLIST.md`](DENYLIST.md) for the full list of all 488 blocked Pokemon wi
 
 ## Notes
 
-- Already-spawned 2D Pokemon get cleaned up within 3 seconds, or clear them with `/kill @e[type=pokemon:<name>]`
+- Already-spawned 2D Pokemon get cleaned up within 3 seconds, or clear them manually with `/kill @e[type=pokemon:<name>]`
 - This does **not** modify PokeBedrock — it's a standalone add-on that runs alongside it
+- The tick scanner covers overworld, nether, and the end
 - Future PokeBedrock updates may add 3D models for listed Pokemon. Remove them from the blacklist when that happens.
-- **This has not been tested in PokeBedrock battles.** The filter removes entities from world spawns — we haven't verified whether it interferes with battle encounters. If you run into issues, let us know.
+- **Not tested in PokeBedrock battles.** The filter removes entities from world spawns — we haven't verified whether it interferes with battle encounters. If you run into issues, let us know via [Issues](https://github.com/blochsam/pokebedrock-3d-spawn-filter/issues).
 - **This was a weekend project and probably won't be updated.** The code is simple and easy to fork.
 
 <br/>

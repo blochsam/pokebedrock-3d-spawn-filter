@@ -1,7 +1,7 @@
 import { world, system } from "@minecraft/server";
 
 // ============================================================
-// PokeBedrock 3D Spawn Filter v1.0.0
+// PokeBedrock 3D Spawn Filter v1.1.0
 // For PokeBedrock v4.4.2 beta on Bedrock Dedicated Server
 //
 // Removes Pokemon that only have 2D sprites (no 3D models)
@@ -512,26 +512,36 @@ world.afterEvents.entitySpawn.subscribe((event) => {
     if (BLACKLIST.has(entity.typeId)) {
       entity.remove();
     }
-  } catch (e) {}
+  } catch (e) {
+    console.warn("[3D Spawn Filter] entitySpawn error: " + e);
+  }
 });
 
 // --- Method 2: Tick-based scanner (backup) ---
 // PokeBedrock spawns some entities via script, which may not
-// trigger entitySpawn. This catches stragglers every 3 seconds.
+// trigger entitySpawn. This sweeps all dimensions every 3 seconds
+// using a single broad query per dimension (much faster than 488
+// individual type queries).
+const DIMENSIONS = ["overworld", "nether", "the_end"];
+
 system.runInterval(() => {
   try {
-    const overworld = world.getDimension("overworld");
-    for (const typeId of BLACKLIST) {
+    for (const dimName of DIMENSIONS) {
       try {
-        const entities = overworld.getEntities({ type: typeId });
+        const dim = world.getDimension(dimName);
+        const entities = dim.getEntities();
         for (const entity of entities) {
           try {
-            if (entity.isValid()) entity.remove();
+            if (entity.isValid() && BLACKLIST.has(entity.typeId)) {
+              entity.remove();
+            }
           } catch (e) {}
         }
       } catch (e) {}
     }
-  } catch (e) {}
+  } catch (e) {
+    console.warn("[3D Spawn Filter] tick scanner error: " + e);
+  }
 }, 60); // 60 ticks = 3 seconds
 
-console.warn("[3D Spawn Filter] Loaded - blocking " + BLACKLIST.size + " Pokemon without 3D models.");
+console.warn("[3D Spawn Filter] v1.1.0 loaded - blocking " + BLACKLIST.size + " Pokemon without 3D models across all dimensions.");
