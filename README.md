@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/banner.svg" alt="PokeBedrock 3D Spawn Filter" width="100%"/>
+  <img src="assets/banner.png" alt="PokeBedrock 3D Spawn Filter" width="100%"/>
 </p>
 
 <p align="center">
