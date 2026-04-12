@@ -65,7 +65,7 @@ Pick **one** of the two methods below. The `.mcpack` is easier if you're not com
 1. Go to the [Releases](https://github.com/blochsam/pokebedrock-3d-spawn-filter/releases) page
 2. Download `PokeBedrock-3D-Spawn-Filter.mcpack`
 3. Unzip it (it's just a `.zip` renamed — use 7-Zip, WinRAR, or just rename it to `.zip`)
-4. Upload the entire extracted folder into your server's `behavior_packs/` directory via FTP or your host's file manager
+4. You'll get a folder called `PokeBedrock-3D-Spawn-Filter` — upload that whole folder into your server's `behavior_packs/` directory via FTP or your host's file manager, so it ends up at `behavior_packs/PokeBedrock-3D-Spawn-Filter/`
 5. Jump to **"Register the pack"** below
 
 ### Option B: Clone from GitHub
