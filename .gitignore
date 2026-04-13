@@ -2,3 +2,4 @@
 Thumbs.db
 *.log
 *.mcpack
+!PokeBedrock-3D-Spawn-Filter.mcpack
