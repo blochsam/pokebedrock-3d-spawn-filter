@@ -5,7 +5,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/PokeBedrock-v4.4.2_beta-DC0A2D?style=for-the-badge&labelColor=1a1a2e" alt="PokeBedrock"/>
   <img src="https://img.shields.io/badge/BDS-1.26.14.1-f5f5f5?style=for-the-badge&labelColor=1a1a2e" alt="BDS"/>
-  <img src="https://img.shields.io/badge/blocked-488_pokemon-3B4CCA?style=for-the-badge&labelColor=1a1a2e" alt="Blocked"/>
+  <img src="https://img.shields.io/badge/blocked-692_pokemon-3B4CCA?style=for-the-badge&labelColor=1a1a2e" alt="Blocked"/>
   <img src="https://img.shields.io/badge/license-MIT-FFDE00?style=for-the-badge&labelColor=1a1a2e" alt="License"/>
 </p>
 
@@ -18,7 +18,7 @@
 </td>
 <td>
 
-**What is this?** A drop-in behavior pack for Bedrock Dedicated Servers running [PokeBedrock](https://pokebedrock.com). It removes all Pokemon that only have 2D sprites — no 3D models — so your world stays fully immersive. 488 Pokemon filtered, including Alolan, Galarian, Hisuian, and Paldean regional forms.
+**What is this?** A drop-in behavior pack for Bedrock Dedicated Servers running [PokeBedrock](https://pokebedrock.com). It removes all Pokemon that only have 2D sprites — no 3D models — so your world stays fully immersive. 692 Pokemon filtered, verified by cross-referencing every entity file against the actual geometry definitions in `pokebedrock_models.geo.json`. Covers base forms, megas, Gigantamax, regional variants, alternate forms, and more.
 
 </td>
 </tr>
@@ -86,7 +86,7 @@ Open `worlds/<your_world>/world_behavior_packs.json` and add this entry to the a
 ```json
 {
   "pack_id": "7cf770a8-b181-4291-8443-d5cf5e66626d",
-  "version": [1, 1, 0]
+  "version": [1, 3, 0]
 }
 ```
 
@@ -94,7 +94,7 @@ Open `worlds/<your_world>/world_behavior_packs.json` and add this entry to the a
 > ```json
 > [
 >   { "pack_id": "your-pokebedrock-uuid-here", "version": [4, 4, 2] },
->   { "pack_id": "7cf770a8-b181-4291-8443-d5cf5e66626d", "version": [1, 1, 0] }
+>   { "pack_id": "7cf770a8-b181-4291-8443-d5cf5e66626d", "version": [1, 3, 0] }
 > ]
 > ```
 
@@ -115,7 +115,7 @@ If PokeBedrock is already working on your server, this is already set — you ca
 Restart your server and look for this line in the console:
 
 ```
-[Scripting] [3D Spawn Filter] v1.1.0 loaded - blocking 488 Pokemon without 3D models across all dimensions.
+[Scripting] [3D Spawn Filter] v1.3.0 loaded - blocking 692 Pokemon without 3D models across all dimensions.
 ```
 
 If you see that, you're good.
@@ -138,7 +138,7 @@ const BLACKLIST = new Set([
 
 Format: `"pokemon:<name>"` matching the entity typeId.
 
-See [`DENYLIST.md`](DENYLIST.md) for the full table of all 488 blocked Pokemon with their typeIds.
+See [`DENYLIST.md`](DENYLIST.md) for the full table of all 692 blocked Pokemon with their typeIds.
 
 <br/>
 
@@ -161,6 +161,19 @@ See [`DENYLIST.md`](DENYLIST.md) for the full table of all 488 blocked Pokemon w
 - Future PokeBedrock updates may add 3D models for listed Pokemon. Remove them from the blacklist when that happens.
 - **Not tested in PokeBedrock battles.** The filter removes entities from world spawns — we haven't verified whether it interferes with battle encounters. If you run into issues, let us know via [Issues](https://github.com/blochsam/pokebedrock-3d-spawn-filter/issues).
 - **This was a weekend project and probably won't be updated.** The code is simple and easy to fork.
+
+<br/>
+
+## Changelog
+
+### v1.3.0
+Geometry-verified blacklist. Cross-referenced all 1,328 entity files against the 863 geometry definitions in `pokebedrock_models.geo.json` to produce a ground-truth blacklist. Removed 51 false positives (Pokemon like Alcremie, Ponyta, Rockruff, Goodra, and Noivern that actually have 3D models) and added 189 previously missed entries (Togekiss, Talonflame, Weavile, Ursaluna, all Silvally type forms, Ogerpon forms, Castform variants, and more). **692 total entries.**
+
+### v1.2.0
+Expanded blacklist to cover alternate forms of already-blocked Pokemon. Added mega evolutions (Absol, Altaria, Audino, Banette, Glalie, Manectric, Mawile, Medicham, Salamence), Rotom appliance forms, Gigantamax forms, legendary/mythical alternate forms (Kyurem Black/White, Necrozma forms, Calyrex forms, Deoxys forms, Therian forms, Zacian/Zamazenta Crowned), alternate forms (Gourgeist/Pumpkaboo sizes, Darmanitan Zen, Cramorant forms, Morpeko Hangry, Wishiwashi School), and the Starly + Fletchling evolution lines. **554 total entries.**
+
+### v1.1.0
+Initial release. Manual blacklist of 488 Pokemon identified as having only 2D sprites.
 
 <br/>
 
